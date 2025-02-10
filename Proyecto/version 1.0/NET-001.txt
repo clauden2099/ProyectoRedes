@@ -1,0 +1,15 @@
+[2024-02-09 14:32:15] [ERROR] Código: NET-001
+Descripción: Conexión de red perdida en el servidor **SRV-DB01**.
+
+[Causa probable]
+- Interrupción en el enlace físico (cable desconectado o dañado).
+- Fallo en el switch de acceso **SW-CORE01**.
+- Configuración errónea de la interfaz de red.
+
+[Acciones recomendadas]
+1. Verificar el estado físico del cable de red.
+2. Comprobar los logs del switch **SW-CORE01** para detectar fallas en los puertos.
+3. Realizar pruebas de conectividad con `ping` y `tracert`.
+4. Si el problema persiste, reiniciar la interfaz de red con:
+   ```bash
+   sudo ifdown eth0 && sudo ifup eth0

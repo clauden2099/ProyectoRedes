@@ -1,0 +1,16 @@
+[2024-02-09 15:00:45] [ERROR] Código: NET-003 
+Descripción: Sin acceso a la red en múltiples dispositivos.
+
+[Causa probable]
+- Problemas con el router o módem.
+- Configuración incorrecta de red en los dispositivos.
+- Interrupciones en el servicio del proveedor de internet.
+- Problemas con el hardware de red, como tarjetas de red o cables.
+
+[Acciones recomendadas]
+1. Reiniciar el router o módem.
+2. Verificar que los cables de red estén correctamente conectados.
+3. Comprobar la configuración de red en los dispositivos y asegurarse de que estén configurados para obtener una dirección IP automáticamente.
+4. Probar con otro dispositivo para determinar si el problema es específico de un dispositivo en particular.
+5. Contactar al proveedor de servicios de internet para verificar si hay interrupciones en el servicio.
+6.Actualizar los controladores de las tarjetas de red en los dispositivos.

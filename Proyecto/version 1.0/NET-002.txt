@@ -1,0 +1,17 @@
+[2024-02-09 14:45:30] [ERROR] Código: NET-002 
+Descripción: Baja velocidad de internet en la oficina principal.
+
+[Causa probable]
+- Uso excesivo de ancho de banda por parte de otros dispositivos.
+- Problemas con el proveedor de servicios de internet.
+- Configuración inadecuada del router o módem.
+- Interferencias en la señal Wi-Fi.
+- Malware o software no deseado en los dispositivos conectados.
+
+[Acciones recomendadas]
+1. Comprobar el uso de ancho de banda en la red y desconectar dispositivos no esenciales.
+2. Contactar al proveedor de servicios de internet para verificar si hay problemas en la zona.
+3. Ajustar la configuración del router para optimizar el rendimiento.
+4. Cambiar el canal de la señal Wi-Fi para reducir interferencias.
+5. Realizar un escaneo de malware en los dispositivos y eliminar cualquier software malicioso.
+6. Reiniciar el router o módem.
