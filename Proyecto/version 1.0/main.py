@@ -1,3 +1,7 @@
+#Librerías
+import subprocess
+import re
+
 #Loop del programa
 ejecucionAplicacion = True
 #Opcion a ingresar
@@ -33,6 +37,16 @@ def mostrar_menu(opciones):
     print(borde_inferior)
 
 
+# Función para listar las redes Wi-Fi disponibles
+def listar_redes():
+    # Ejecutar el comando netsh para mostrar las redes Wi-Fi disponibles
+    resultado = subprocess.run(['netsh', 'wlan', 'show', 'network', 'mode=bssid'], capture_output=True, text=True)
+    # Buscar y extraer los SSID de las redes encontradas
+    redes = re.findall(r'SSID (\d+) : (.+)', resultado.stdout)
+    # Devolver una lista con los nombres de las redes
+    return [nombre for _, nombre in redes]
+
+
 #Ciclo del programa donde se ejecutan todas las 
 #funciones principales del mismo
 while ejecucionAplicacion:
@@ -42,7 +56,15 @@ while ejecucionAplicacion:
     if opcion in opciones:
         #Lista las redes y se conecta a alguna
         if opcion == "1":
-            pass
+            # Listar las redes Wi-Fi disponibles
+            listaRedes = listar_redes()
+            print(type(listaRedes))
+            # Comprueba si la lista de redes está vacía o no
+            if listaRedes:
+                print("Redes disponibles")
+                # Se imprime la lista de redes
+                for i, red in enumerate(listaRedes, 1):
+                    print(f"{i}. {red}") 
         #Escanea los dispositivos de la red
         if opcion == "2":
             pass
