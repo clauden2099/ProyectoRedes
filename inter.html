@@ -1,11 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Registro de Fallas</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #888;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: #555;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid white;
+            padding: 10px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #888;
+            border: none;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #777;
+        }
+    </style>
 </head>
 <body>
-    <h2>hi</h2>
+    <h2>REGISTRO DE FALLAS Y SEGUIMIENTO</h2>
+    <div class="container">
+        <table>
+            <tr>
+                <th>DESCRIPCIÓN DE FALLA</th>
+                <th>ESTADO</th>
+                <th>FECHA</th>
+                <th>DISPOSITIVO</th>
+            </tr>
+            <tr>
+                <td>CONFLICTO DE IP</td>
+                <td>EN PROCESO</td>
+                <td>05/10/2023</td>
+                <td>PC ADMIN</td>
+            </tr>
+        </table>
+        <div class="buttons">
+            <button>➕</button>
+            <button>❌</button>
+        </div>
+    </div>
 </body>
 </html>
