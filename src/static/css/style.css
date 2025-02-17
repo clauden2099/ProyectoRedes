@@ -132,3 +132,78 @@ h3{ font-size: 2.4rem;}
     cursor: pointer;
 }
 /*----- Lista de Redes Fin -----*/
+
+
+/*----- Lista de dispositivos Inicio----- */
+/* Contenedor de la lista de dispositivos en grid */
+#dispositivos {
+    list-style: none;
+    padding: 0;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    max-width: 120rem;
+}
+
+/* Estilo para cada tarjeta de dispositivo */
+#dispositivos li {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--blanco);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+/* Efecto hover para interacción */
+#dispositivos li:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+#dispositivos li p {
+    margin: 0.5rem 0;
+    text-align: left;
+    /* Alinea el texto a la izquierda para mayor legibilidad */
+}
+
+#dispositivos li strong {
+    color: var(--secundario);
+    /* Destaca los títulos, por ejemplo */
+}
+
+/* Estilo para el spinner (loader) */
+.loader {
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    /* borde tenue */
+    border-top: 8px solid var(--secundario);
+    /* borde superior destacado */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+    /* centrado horizontalmente con margen vertical */
+}
+
+/* Ocultar el loader cuando no se necesite */
+.hidden {
+    display: none;
+}
+
+/* Animación de giro */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*----- Lista de dispostivios Fin -----*/
