@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Inicio</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css')}}">
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-    <h1>Bienvenido a Flask</h1>
-    <a href="/listaRedes">Listar redes y conectarse a una</a>
-    <a href="/listaDispositivos">Escanear Red</a>
-    <a href="/tickets">Registro y seguimiento de fallas</a>
-    <a href="/inven">Inventario</a>
-    <a href="">Configuraciones</a>
-    <a href="/planes">Planes de prevención y corrección</a>
+
+    <header>
+        <h1 >Gestor de redes</h1>
+    </header>
+
+    <nav class="navegacion">
+        <a href="/listaRedes" class="navegacion__enlace ">Listar redes y conectarse a una</a>
+        <a href="/listaDispositivos" class="navegacion__enlace ">Escanear Red</a>
+        <a href="/tickets" class="navegacion__enlace ">Registro y seguimiento de fallas</a>
+        <a href="/inven" class="navegacion__enlace">Inventario</a>
+        <a href="" class="navegacion__enlace">Configuraciones</a>
+        <a href="/planes" class="navegacion__enlace">Planes de prevención y corrección</a>
+    </nav>
 
 </body>
 </html>
