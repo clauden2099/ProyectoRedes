@@ -1,0 +1,208 @@
+#titulo1 {
+    color: tomato;
+}
+
+/*selecionar solo las estiquetas p fuera de uno div */
+p.texto {
+    color: rgb(78, 53, 221);
+}
+
+/* selecionar la etiquetas p dentro de un div */
+div p {
+
+    color: aquamarine;
+}
+
+/* selecionar variables dentro de un div */
+div h2,
+div h3 {
+
+    color: red;
+}
+
+/*
+     tamaño de letra y el ast selecion de todo en general 
+    font-size: 24px;
+    
+*/
+
+/*borde a las letra*/
+.color1 {
+    border: 2px red inset;
+    border-radius: 5px;
+    border-width: 5px;
+    /*dotted
+   dashed
+   solid
+   double
+   ridge
+   inset
+   outsed#fondo1*/
+
+
+}
+
+/*imagen al fondo con color y posicion */
+#fondo1 {
+    background-color: rgb(245, 12, 12);
+
+    /*  opacity: 0.3;*/
+    height: 300px;
+    background: rgb(245, 12, 12) url('img/OIP.jpeg') repeat-y center bottom;
+    background-repeat: no-repeat;
+    background-size: 100px 100px;
+
+}
+
+/*posicion de texto en la pantalla con margen */
+.margen {
+    background-color: chocolate;
+    margin: 15px 20px 25px 30px;
+    /* x,y,z*/
+
+    /*mover espacio dentro del elemnto o margen */
+    padding: 30px 25px 20px 15px;
+    border: solid 1px black;
+
+    overflow: scroll;
+    outline: 1px solid red;
+}
+
+.text {
+    /*fuente*/
+    font-family: Arial, Helvetica, sans-serif;
+    /*alinear el texto*/
+    text-align: center;
+    /*decoracion*/
+    text-decoration: overline;
+    /*sombreado*/
+    text-shadow: 3px 5px 5px red;
+}
+
+/*decoracion de links movimiento de cursor*/
+a:link {
+    color: blueviolet;
+}
+
+/*1*/
+a:visited {
+    color: aquamarine;
+}
+
+/*2*/
+a:hover {
+    color: rebeccapurple;
+}
+
+/*3*/
+a:active {
+    color: blanchedalmond;
+}
+
+/*listas */
+ul {
+    background-color: aqua;
+    /*eliminar los puntos de las listas */
+    list-style-type: none;
+    /*alinear lista */
+    padding-left: 0;
+}
+
+/*tablas */
+table {
+    width: 100%;
+    /*sirve para quitar la separacion de las celdas */
+    border-collapse: collapse;
+}
+
+/*borde */
+th,
+td {
+    border: solid 1px black;
+}
+
+/*darle  color y fondo al cabezeras de las tablas  */
+th {
+    background-color: aquamarine;
+    /*color fuente de tex */
+    color: yellow;
+    /*alinear el texto */
+    text-align: left;
+
+
+}
+
+/*cuando pase el cursor solo en el contenido camb color de fondo  */
+tr:hover {
+    background-color: brown;
+    /*icono del cursor*/
+    cursor: pointer;
+}
+
+/*dejar unas con color y otras no en cazo de seguir usando el comando de arriba 
+ ir antes del hover*/
+tr:nth-child(even) {
+    background-color: blueviolet;
+}
+
+/*salto de linea*/
+span {
+    display: block;
+    /*display: none;*/
+    /* visibility: hidden;*/
+    /* sirve para el ancho del fondo se achique
+    con la pantalla */
+    max-width: 300px;
+    background-color: blueviolet;
+}
+
+.inline {
+    display: inline;
+}
+
+/*posicion del texto*/
+#posicion {
+    position: relative;
+    left: 20px;
+    /*hacia a bajo*/
+    /*top: 25px;*/
+}
+
+/*sirve para poner imagen y el tex a lado*/
+.left {
+    float: left;
+    width: 200px;
+    height: 200px;
+}
+
+.right {
+    float: right;
+}
+
+.contaider {
+    height: 200px;
+}
+/*sson los numeros de la izquierda*/
+.card {
+    border: solid 1px black;
+    border-radius: 5px;
+    margin: 0 15px;
+    padding: 10px 15px;
+}
+
+/*sirve para cuando se posicion el text
+el de abajo baje mas */
+.inline-block{
+    display: inline;
+    height: 55px;
+    background-color: red;
+}
+/*scentrar texto*/
+.center{
+   /* padding: 300px;*/
+    width: 200px;
+    margin: 0 auto;
+    background-color: aqua;
+    /*scentrar en el fondo*/
+    text-align: center;
+}
