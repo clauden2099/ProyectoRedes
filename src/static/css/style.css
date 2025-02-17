@@ -207,3 +207,147 @@ h3{ font-size: 2.4rem;}
 }
 
 /*----- Lista de dispostivios Fin -----*/
+
+
+/*----- Formularios Inicio -----*/
+.formulario {
+    background: rgba(255, 255, 255, 0.2);
+    /*Con esta función se evalua que valor es más pequeño en base al tamaño que 
+    tiene disponible y elije uno u otro
+    como en este caso se esta evaluando si utilizar 600pixeles o el 100%
+    disponible de la pantalla, de esta manera se evita utilzar algunos MQ*/
+    width: min(40rem, 100%);
+    /*Esta es la forma más sencilla de centrar elementos o contenedores que su 
+    padre no tenga flex o grid*/
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.contenedor-campos {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.formulario__campo {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.6rem;
+    background-color: var(--blanco);
+    color: var(--negro);
+    transition: box-shadow 0.3s ease;
+}
+
+.formulario__submit {
+    width: 100%;
+    font-size: 2rem;
+    padding: 1.8rem;
+    background-color: var(--secundario);
+    border: none;
+    border-radius: 5px;
+    /*Se hace una especie de animación de color */
+    transition: background-color .3s ease;
+    color: var(--negro);
+    font-weight: bold;
+}
+
+.formulario__submit:hover {
+    cursor: pointer;
+    background-color: var(--secundarioOscuro);
+}
+
+
+/* Estilos específicos para la tabla de tickets */
+.tabla-tickets {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--blanco);
+    margin-top: 2rem;
+}
+
+.tabla-tickets th,
+.tabla-tickets td {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.6rem;
+}
+
+.tabla-tickets th {
+    background-color: var(--primarioOscuro);
+    color: var(--blanco);
+}
+
+/* Botones de acción en la tabla */
+.btn-accion {
+    padding: 0.8rem 1.2rem;
+    margin: 0.2rem;
+    font-size: 1.6rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.porResolver-btn {
+    background-color: red;
+    color: var(--blanco);
+}
+
+.resuelto-btn {
+    background-color: green;
+    color: var(--blanco);
+}
+
+.edit-btn {
+    background-color: orange;
+    color: var(--blanco);
+}
+
+.delete-btn {
+    background-color: red;
+    color: var(--blanco);
+}
+
+/* Modal */
+#formContainer {
+    display: none;
+    /* Oculto inicialmente */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+#formulario {
+    background: var(--blanco);
+    padding: 2rem;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 400px;
+}
+
+#formulario input,
+#formulario textarea,
+#formulario select,
+#formulario button {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    font-size: 1.6rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#formulario button {
+    cursor: pointer;
+}

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Tickets de Error</title>
+    <!-- Se carga el CSS global de la aplicación -->
+    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- Flatpickr para selección de fechas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+
+<body>
+    <!-- Header y Navegación (estructura consistente con el resto de la app) -->
+    <header>
+        <a href="/">
+            <h1>Gestor de redes</h1>
+        </a>
+    </header>
+
+    <nav class="navegacion">
+        <a href="/listaRedes" class="navegacion__enlace">Listar redes y conectarse a una</a>
+        <a href="/listaDispositivos" class="navegacion__enlace">Escanear Red</a>
+        <a href="/tickets" class="navegacion__enlace navegacion__enlace--activo">Registro y seguimiento de fallas</a>
+        <a href="/inven" class="navegacion__enlace">Inventario</a>
+        <a href="#" class="navegacion__enlace">Configuraciones</a>
+        <a href="/planes" class="navegacion__enlace">Planes de prevención y corrección</a>
+    </nav>
+
+    <!-- Contenedor principal -->
+    <main class="contenedor">
+        <h2>Gestión de Tickets de Error</h2>
+
+        <!-- Modal para crear/editar tickets -->
+        <div id="formContainer">
+            <div id="formulario">
+                <h3 id="formTitulo">Crear Ticket</h3>
+                <form id="ticketForm">
+                    <input type="text" id="dispositivo" placeholder="Dispositivo afectado" required>
+                    <textarea id="descripcion" placeholder="Descripción del problema" required></textarea>
+                    <input type="date" id="fecha" required>
+                    <input type="text" id="responsable" placeholder="Responsable" required>
+                    <select id="prioridad">
+                        <option value="Alta">Alta</option>
+                        <option value="Media">Media</option>
+                        <option value="Baja">Baja</option>
+                    </select>
+                    <div>
+                        <button type="button" onclick="guardarTicket()">Guardar</button>
+                        <button type="button" onclick="ocultarFormulario()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla de tickets pendientes -->
+        <h3>Tickets Pendientes</h3>
+        <table id="pendingTable" class="tabla-tickets">
+            <thead>
+                <tr>
+                    <th>Dispositivo</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Responsable</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                {% if ticket.estado == "Pendiente" %}
+                <tr data-id="{{ ticket.id }}">
+                    <td>{{ ticket.dispositivo }}</td>
+                    <td>{{ ticket.descripcion }}</td>
+                    <td>{{ ticket.fecha }}</td>
+                    <td>{{ ticket.responsable }}</td>
+                    <td>{{ ticket.prioridad }}</td>
+                    <td>
+                        <button onclick="cambiarEstado(this)" class="btn-accion porResolver-btn">
+                            {{ ticket.estado }}
+                        </button>
+                    </td>
+                    <td>
+                        <button onclick="editarFila(this)" class="btn-accion edit-btn">Editar</button>
+                        <button onclick="eliminarFila(this)" class="btn-accion delete-btn">Eliminar</button>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Tabla de tickets resueltos -->
+        <h3>Tickets Resueltos</h3>
+        <table id="resolvedTable" class="tabla-tickets">
+            <thead>
+                <tr>
+                    <th>Dispositivo</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Responsable</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                {% if ticket.estado == "Resuelto" %}
+                <tr data-id="{{ ticket.id }}">
+                    <td>{{ ticket.dispositivo }}</td>
+                    <td>{{ ticket.descripcion }}</td>
+                    <td>{{ ticket.fecha }}</td>
+                    <td>{{ ticket.responsable }}</td>
+                    <td>{{ ticket.prioridad }}</td>
+                    <td>
+                        <button onclick="cambiarEstadoResuelto(this)" class="btn-accion resuelto-btn">
+                            {{ ticket.estado }}
+                        </button>
+                    </td>
+                    <td>
+                        <button onclick="editarFila(this)" class="btn-accion edit-btn">Editar</button>
+                        <button onclick="eliminarFila(this)" class="btn-accion delete-btn">Eliminar</button>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Botón para abrir el modal y crear un nuevo ticket -->
+        <button onclick="mostrarFormulario()" class="boton">Nuevo Ticket</button>
+    </main>
+
+    <!-- Scripts de la página -->
+    <script>
+        let editingRow = null;
+
+        function mostrarFormulario() {
+            document.getElementById("formTitulo").textContent = "Crear Ticket";
+            document.getElementById("ticketForm").reset();
+            editingRow = null;
+            document.getElementById("formContainer").style.display = "flex";
+        }
+
+        function ocultarFormulario() {
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("ticketForm").reset();
+            editingRow = null;
+        }
+
+        function guardarTicket() {
+            const dispositivo = document.getElementById("dispositivo").value.trim();
+            const descripcion = document.getElementById("descripcion").value.trim();
+            const fecha = document.getElementById("fecha").value.trim();
+            const responsable = document.getElementById("responsable").value.trim();
+            const prioridad = document.getElementById("prioridad").value.trim();
+
+            if (!dispositivo || !descripcion || !fecha || !responsable || !prioridad) {
+                alert("Todos los campos son obligatorios.");
+                return;
+            }
+
+            const data = { dispositivo, descripcion, fecha, responsable, prioridad };
+
+            if (editingRow) {
+                data.id = editingRow.getAttribute("data-id");
+                const rowToEdit = editingRow;
+                fetch("/actualizarTicket", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            const updated = result.updated;
+                            rowToEdit.cells[0].textContent = updated.dispositivo;
+                            rowToEdit.cells[1].textContent = updated.descripcion;
+                            rowToEdit.cells[2].textContent = updated.fecha;
+                            rowToEdit.cells[3].textContent = updated.responsable;
+                            rowToEdit.cells[4].textContent = updated.prioridad;
+                        } else {
+                            alert("Error al actualizar: " + (result.message || ""));
+                        }
+                        ocultarFormulario();
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        ocultarFormulario();
+                    });
+            } else {
+                fetch('/agregarTicket', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            const tabla = document.getElementById("pendingTable").querySelector("tbody");
+                            const nuevaFila = tabla.insertRow();
+                            nuevaFila.setAttribute("data-id", result.ticket.id);
+                            nuevaFila.insertCell(0).textContent = dispositivo;
+                            nuevaFila.insertCell(1).textContent = descripcion;
+                            nuevaFila.insertCell(2).textContent = fecha;
+                            nuevaFila.insertCell(3).textContent = responsable;
+                            nuevaFila.insertCell(4).textContent = prioridad;
+
+                            const celdaEstado = nuevaFila.insertCell(5);
+                            const btnEstado = document.createElement("button");
+                            btnEstado.textContent = result.ticket.estado;
+                            btnEstado.classList.add("btn-accion", "porResolver-btn");
+                            btnEstado.onclick = function () { cambiarEstado(this); };
+                            celdaEstado.appendChild(btnEstado);
+
+                            const celdaAcciones = nuevaFila.insertCell(6);
+                            celdaAcciones.innerHTML = '<button onclick="editarFila(this)" class="btn-accion edit-btn">Editar</button> ' +
+                                '<button onclick="eliminarFila(this)" class="btn-accion delete-btn">Eliminar</button>';
+                        } else {
+                            alert("Error al agregar");
+                        }
+                        ocultarFormulario();
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        ocultarFormulario();
+                    });
+            }
+        }
+
+        function cambiarEstado(btn) {
+            const fila = btn.closest("tr");
+            const id = fila.getAttribute("data-id");
+            if (!id) {
+                alert("No se encontró el ID, no se puede cambiar");
+                return;
+            }
+            fetch('/actualizarEstado', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id, nuevoEstado: 'Resuelto' })
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        btn.textContent = "Resuelto";
+                        btn.classList.remove("porResolver-btn");
+                        btn.classList.add("resuelto-btn");
+                        btn.onclick = function () { cambiarEstadoResuelto(this); };
+                        // Mover la fila a la tabla de tickets resueltos
+                        fila.parentElement.removeChild(fila);
+                        document.getElementById("resolvedTable").querySelector("tbody").appendChild(fila);
+                    } else {
+                        alert("No se pudo actualizar el estado: " + result.message);
+                    }
+                })
+                .catch(error => console.error("Error al actualizar el estado:", error));
+        }
+
+        function cambiarEstadoResuelto(btn) {
+            const fila = btn.closest("tr");
+            const id = fila.getAttribute("data-id");
+            if (!id) {
+                alert("No se encontró el ID, no se puede cambiar");
+                return;
+            }
+            fetch('/actualizarEstado', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id, nuevoEstado: 'Pendiente' })
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        btn.textContent = "Pendiente";
+                        btn.classList.remove("resuelto-btn");
+                        btn.classList.add("porResolver-btn");
+                        btn.onclick = function () { cambiarEstado(this); };
+                        // Mover la fila a la tabla de tickets pendientes
+                        fila.parentElement.removeChild(fila);
+                        document.getElementById("pendingTable").querySelector("tbody").appendChild(fila);
+                    } else {
+                        alert("No se pudo actualizar el estado: " + result.message);
+                    }
+                })
+                .catch(error => console.error("Error al actualizar el estado:", error));
+        }
+
+        function editarFila(boton) {
+            const fila = boton.closest("tr");
+            editingRow = fila;
+            document.getElementById("dispositivo").value = fila.cells[0].textContent;
+            document.getElementById("descripcion").value = fila.cells[1].textContent;
+            document.getElementById("fecha").value = fila.cells[2].textContent;
+            document.getElementById("responsable").value = fila.cells[3].textContent;
+            document.getElementById("prioridad").value = fila.cells[4].textContent;
+            document.getElementById("formTitulo").textContent = "Editar Ticket";
+            document.getElementById("formContainer").style.display = "flex";
+        }
+
+        function eliminarFila(boton) {
+            if (confirm("¿Está seguro de eliminar este elemento?")) {
+                const fila = boton.closest("tr");
+                const id = fila.getAttribute("data-id");
+                if (!id) {
+                    alert("No se encontró el ID, no se puede eliminar");
+                    return;
+                }
+                fetch("/eliminarTicket", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: id })
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            fila.parentNode.removeChild(fila);
+                        } else {
+                            alert("Error al eliminar: " + (result.message || ""));
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("#fecha", {
+                dateFormat: "Y-m-d",
+                locale: "es",
+            });
+        });
+    </script>
+</body>
+
+</html>
