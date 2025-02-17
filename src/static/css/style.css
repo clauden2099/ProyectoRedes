@@ -1,0 +1,134 @@
+:root{
+
+    --primario: #9C27B0;
+    --primarioOscuro: #89119D;
+    --secundario: #FFCE00;
+    --secundarioOscuro: rgb(233,287,2);
+    --blanco: #FFF;
+    --negro: #000;
+}
+
+/* Globales */
+html{
+    box-sizing: border-box;
+    font-size: 62.5%; /* 1rem = 10px*/
+}
+
+*,*:before, *:after{
+    box-sizing: inherit;
+}
+
+body{
+    background-color: var(--primario);
+    font-size: 1.6rem;
+    line-height: 1.5;
+}
+
+p{
+    font-size: 1.8rem;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--blanco);
+}
+
+li{
+    font-size: 1.8rem;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--blanco);
+}
+
+a{
+    text-decoration: none;
+}
+
+img{
+    width: 100%;
+}
+
+/*Con este se supone que se centran los elmetnos*/
+.contenedor{
+    max-width: 120rem;
+    margin: 0 auto;
+}
+
+h1,h2,h3{
+    text-align: center;
+    color: var(--secundario);
+}
+
+h1{ font-size: 4rem; }
+h2{ font-size: 3.2rem; }
+h3{ font-size: 2.4rem;}
+
+
+.boton{
+    display: flex;
+    font-size: 2rem;
+    text-align: center;
+    padding: 1.8rem;
+    background-color: var(--secundario);
+    border: none;
+    border-radius: 5px;
+    /*Se hace una especie de animación de color */
+    transition: background-color .3s ease;
+}
+
+.boton:hover{
+    cursor: pointer;
+    background-color: var(--secundarioOscuro);
+}
+/*----- Globales Fin -----*/
+
+
+/*----- Navegación Inicio -----*/
+.navegacion{
+    background-color: var(--primarioOscuro);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (min-width: 968px) {
+    .navegacion{
+        flex-direction: row;
+        justify-content: space-around;
+    }
+}
+
+.navegacion__enlace{
+    color: var(--blanco);
+    font-size: 2.8rem;
+    font-weight: 700;
+    padding: 1rem;
+}
+
+.navegacion__enlace--activo,
+.navegacion__enlace:hover{
+    color: var(--secundario);
+}
+
+/*----- Navegación fin -----*/
+
+/*----- Lista de Redes Inicio -----*/
+#lista-redes {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+#lista-redes li {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+#lista-redes li:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+}
+/*----- Lista de Redes Fin -----*/
