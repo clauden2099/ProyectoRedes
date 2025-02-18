@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventario de Dispositivos</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+    <!-- Header y Navegación (estructura consistente con el resto de la app) -->
+    <header>
+        <a href="/">
+            <h1>Gestor de redes</h1>
+        </a>
+    </header>
+
+
+    <nav class="navegacion">
+        <a href="/listaRedes" class="navegacion__enlace ">Listar redes y conectarse a una</a>
+        <a href="/listaDispositivos" class="navegacion__enlace ">Escanear Red</a>
+        <a href="/tickets" class="navegacion__enlace ">Registro y seguimiento de fallas</a>
+        <a href="/inven" class="navegacion__enlace navegacion__enlace--activo">Inventario</a>
+        <a href="" class="navegacion__enlace ">Configuraciones</a>
+        <a href="/planes" class="navegacion__enlace ">Planes de prevención y corrección</a>
+    </nav>
+
+    <main class="contenedor">
+        <h2>Inventario de Dispositivos</h2>
+        <!-- Tabla de dispositivos -->
+        <table id="miTabla">
+            <thead>
+                <tr>
+                    <th>Dispositivo</th>
+                    <th>Modelo</th>
+                    <th>Totales</th>
+                    <th>En uso</th>
+                    <th>En inventario</th>
+                    <th>Ubicación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inventario %}
+                <tr data-id="{{item.id}}">
+                    <td>{{item.dispositivo}}</td>
+                    <td>{{item.modelo}}</td>
+                    <td>{{item.totales}}</td>
+                    <td>{{item.en_uso}}</td>
+                    <td>{{item.en_inventario}}</td>
+                    <td>{{item.ubicacion}}</td>
+                    <td>
+                        <button onclick="editarFila(this)" class="btn-accion edit-btn">Editar</button>
+                        <button onclick="eliminarFila(this)" class="btn-accion delete-btn">Eliminar</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Botón para mostrar el formulario para agregar un nuevo elemento -->
+        <button onclick="mostrarFormulario()" class="boton">Nuevo Elemento</button>
+
+    </main>
+
+    <!-- Formulario Modal para el dispositivo -->
+    <div id="formContainer">
+        <div id="formulario">
+            <h3 id="formTitulo">Agregar Elemento</h3>
+            <form id="elementosFormulario">
+                <input type="text" id="dispositivo" placeholder="Dispositivo" required />
+                <input type="text" id="modelo" placeholder="Modelo" required />
+                <input type="number" id="totales" placeholder="Totales" required />
+                <input type="number" id="enUso" placeholder="En uso" required />
+                <input type="number" id="enInventario" placeholder="En inventario" required />
+                <input type="text" id="ubicacion" placeholder="Ubicación" required />
+                <div>
+                    <button type="button" onclick="guardarElemento()">Guardar</button>
+                    <button type="button" onclick="ocultarFormulario()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Variable global para identificar la fila que se está editando.
+        let editingRow = null;
+
+        // Mostrar el formulario en modo "nuevo elemento".
+        function mostrarFormulario() {
+            document.getElementById("formTitulo").textContent = "Agregar Elemento";
+            document.getElementById("elementosFormulario").reset();
+            editingRow = null; // Asegurarse de que no se esté editando ninguna fila
+            document.getElementById("formContainer").style.display = "flex";
+        }
+
+        // Ocultar y reiniciar el formulario.
+        function ocultarFormulario() {
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("elementosFormulario").reset();
+            editingRow = null;
+        }
+
+        // Función para guardar (agregar o actualizar) el elemento.
+        function guardarElemento() {
+            // Obtener valores del formulario
+            const dispositivo = document.getElementById("dispositivo").value.trim();
+            const modelo = document.getElementById("modelo").value.trim();
+            const totales = document.getElementById("totales").value.trim();
+            const enUso = document.getElementById("enUso").value.trim();
+            const enInventario = document.getElementById("enInventario").value.trim();
+            const ubicacion = document.getElementById("ubicacion").value.trim();
+
+            // Validar que los campos no estén vacíos
+            if (!dispositivo || !modelo || !totales || !enUso || !enInventario || !ubicacion) {
+                alert("Todos los campos son obligatorios.");
+                return;
+            }
+
+            // Datos que se enviarán a Flask
+            const data = {
+                dispositivo: dispositivo,
+                modelo: modelo,
+                totales: parseInt(totales),
+                en_uso: parseInt(enUso),
+                en_inventario: parseInt(enInventario),
+                ubicacion: ubicacion
+            };
+
+            if (editingRow) {
+                // Si se está editando, incluir el id
+                data.id = editingRow.getAttribute("data-id");
+                // Guarda la referencia a la fila actual en una variable local
+                const rowToEdit = editingRow;
+
+                fetch("/actualizar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        console.log("Respuesta del servidor:", result);
+                        if (result.success) {
+                            const updated = result.updated;
+                            // Actualiza la fila usando la referencia local
+                            rowToEdit.cells[0].textContent = updated.dispositivo;
+                            rowToEdit.cells[1].textContent = updated.modelo;
+                            rowToEdit.cells[2].textContent = updated.totales;
+                            rowToEdit.cells[3].textContent = updated.en_uso;
+                            rowToEdit.cells[4].textContent = updated.en_inventario;
+                            rowToEdit.cells[5].textContent = updated.ubicacion;
+                        } else {
+                            alert("Error al actualizar: " + (result.message || ""));
+                        }
+                        ocultarFormulario();
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        ocultarFormulario();
+                    });
+            } else {
+                // Agregar nuevo dispositivo
+                fetch("/agregar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            // Agregar la nueva fila a la tabla, incluyendo el id devuelto por Flask
+                            const tabla = document.getElementById("miTabla").querySelector("tbody");
+                            const nuevaFila = tabla.insertRow();
+                            nuevaFila.setAttribute("data-id", result.id);
+
+                            const celdaDispositivo = nuevaFila.insertCell(0);
+                            const celdaModelo = nuevaFila.insertCell(1);
+                            const celdaTotales = nuevaFila.insertCell(2);
+                            const celdaEnUso = nuevaFila.insertCell(3);
+                            const celdaEnInventario = nuevaFila.insertCell(4);
+                            const celdaUbicacion = nuevaFila.insertCell(5);
+                            const celdaAcciones = nuevaFila.insertCell(6);
+
+                            celdaDispositivo.textContent = dispositivo;
+                            celdaModelo.textContent = modelo;
+                            celdaTotales.textContent = totales;
+                            celdaEnUso.textContent = enUso;
+                            celdaEnInventario.textContent = enInventario;
+                            celdaUbicacion.textContent = ubicacion;
+                            celdaAcciones.innerHTML = '<button onclick="editarFila(this)">Editar</button> ' +
+                                '<button onclick="eliminarFila(this)">Eliminar</button>';
+                        } else {
+                            alert("Error al agregar");
+                        }
+                        ocultarFormulario();
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        ocultarFormulario();
+                    });
+            }
+        }
+
+        // Función para cargar los datos de la fila en el formulario y editar
+        function editarFila(boton) {
+            // Obtener la fila que se desea editar
+            const fila = boton.parentNode.parentNode;
+            editingRow = fila; // Marcar esta fila como la que se está editando
+
+            // Cargar los datos de la fila en el formulario
+            document.getElementById("dispositivo").value = fila.cells[0].textContent;
+            document.getElementById("modelo").value = fila.cells[1].textContent;
+            document.getElementById("totales").value = fila.cells[2].textContent;
+            document.getElementById("enUso").value = fila.cells[3].textContent;
+            document.getElementById("enInventario").value = fila.cells[4].textContent;
+            document.getElementById("ubicacion").value = fila.cells[5].textContent;
+
+            // Cambiar el título del formulario para indicar que se está editando
+            document.getElementById("formTitulo").textContent = "Editar Elemento";
+
+            // Mostrar el formulario
+            document.getElementById("formContainer").style.display = "flex";
+        }
+
+        // Función para eliminar con petición al servidor
+        function eliminarFila(boton) {
+            if (confirm("¿Está seguro de eliminar este elemento?")) {
+                const fila = boton.parentNode.parentNode;
+                const id = fila.getAttribute("data-id");
+                if (!id) {
+                    alert("No se encontró ID, no se puede eliminar");
+                    return;
+                }
+                fetch("/eliminar", {  // O "/inventario/eliminar" si tienes un url_prefix
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: id })
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            fila.parentNode.removeChild(fila);
+                        } else {
+                            alert("Error al eliminar: " + (result.message || ""));
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>

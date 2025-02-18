@@ -351,3 +351,52 @@ h3{ font-size: 2.4rem;}
 #formulario button {
     cursor: pointer;
 }
+
+
+
+/* Estilos para la tabla de Inventario */
+#miTabla {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--blanco);
+    margin-top: 2rem;
+}
+
+#miTabla th,
+#miTabla td {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.6rem;
+}
+
+#miTabla th {
+    background-color: var(--primarioOscuro);
+    color: var(--blanco);
+}
+
+
+/* Estilos para las tablas de planes */
+#corrTable,
+#prevTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--blanco);
+    margin-top: 2rem;
+}
+
+#corrTable th,
+#corrTable td,
+#prevTable th,
+#prevTable td {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.6rem;
+}
+
+#corrTable th,
+#prevTable th {
+    background-color: var(--primarioOscuro);
+    color: var(--blanco);
+}
