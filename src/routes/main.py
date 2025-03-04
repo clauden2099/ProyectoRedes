@@ -4,7 +4,7 @@ main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/")
 def home():
-    return redirect("/inicio")
+    return redirect("/login")
 
 @main_bp.route("/inicio")
 def inicio():

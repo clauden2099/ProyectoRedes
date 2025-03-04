@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <!-- Flatpickr para selección de fechas -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 </head>
 
 <body>
@@ -24,7 +26,7 @@
         <a href="/listaDispositivos" class="navegacion__enlace">Escanear Red</a>
         <a href="/tickets" class="navegacion__enlace navegacion__enlace--activo">Registro y seguimiento de fallas</a>
         <a href="/inven" class="navegacion__enlace">Inventario</a>
-        <a href="#" class="navegacion__enlace">Configuraciones</a>
+        <a href="/configuracion" class="navegacion__enlace">Configuraciones</a>
         <a href="/planes" class="navegacion__enlace">Planes de prevención y corrección</a>
     </nav>
 
@@ -56,7 +58,7 @@
 
         <!-- Tabla de tickets pendientes -->
         <h3>Tickets Pendientes</h3>
-        <table id="pendingTable" class="tabla-tickets">
+        <table id="TablaPendiente" class="tabla-tickets">
             <thead>
                 <tr>
                     <th>Dispositivo</th>
@@ -78,7 +80,47 @@
                     <td>{{ ticket.responsable }}</td>
                     <td>{{ ticket.prioridad }}</td>
                     <td>
-                        <button onclick="cambiarEstado(this)" class="btn-accion porResolver-btn">
+                        <button onclick="cambiarEstadoAProceso(this)" class="btn-accion porResolver-btn">
+                            {{ ticket.estado }}
+                        </button>
+                    </td>
+                    <td>
+                        <button onclick="editarFila(this)" class="btn-accion edit-btn">Editar</button>
+                        <button onclick="eliminarFila(this)" class="btn-accion delete-btn">Eliminar</button>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        
+
+        <!-- Tabla de tickets en proceso -->
+        <h3>Tickets Proceso</h3>
+        <table id="TablaProceso" class="tabla-tickets">
+            <thead>
+                <tr>
+                    <th>Dispositivo</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Responsable</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                {% if ticket.estado == "Proceso" %}
+                <tr data-id="{{ ticket.id }}">
+                    <td>{{ ticket.dispositivo }}</td>
+                    <td>{{ ticket.descripcion }}</td>
+                    <td>{{ ticket.fecha }}</td>
+                    <td>{{ ticket.responsable }}</td>
+                    <td>{{ ticket.prioridad }}</td>
+                    <td>
+                        <button onclick="cambiarEstadoAFinalizado(this)" class="btn-accion proceso-btn">
                             {{ ticket.estado }}
                         </button>
                     </td>
@@ -94,7 +136,7 @@
 
         <!-- Tabla de tickets resueltos -->
         <h3>Tickets Resueltos</h3>
-        <table id="resolvedTable" class="tabla-tickets">
+        <table id="TablaResuelto" class="tabla-tickets">
             <thead>
                 <tr>
                     <th>Dispositivo</th>
@@ -116,7 +158,7 @@
                     <td>{{ ticket.responsable }}</td>
                     <td>{{ ticket.prioridad }}</td>
                     <td>
-                        <button onclick="cambiarEstadoResuelto(this)" class="btn-accion resuelto-btn">
+                        <button onclick="cambiarEstadoAPendiente(this)" class="btn-accion resuelto-btn">
                             {{ ticket.estado }}
                         </button>
                     </td>
@@ -200,7 +242,7 @@
                     .then(response => response.json())
                     .then(result => {
                         if (result.success) {
-                            const tabla = document.getElementById("pendingTable").querySelector("tbody");
+                            const tabla = document.getElementById("TablaPendiente").querySelector("tbody");
                             const nuevaFila = tabla.insertRow();
                             nuevaFila.setAttribute("data-id", result.ticket.id);
                             nuevaFila.insertCell(0).textContent = dispositivo;
@@ -231,62 +273,97 @@
             }
         }
 
-        function cambiarEstado(btn) {
-            const fila = btn.closest("tr");
-            const id = fila.getAttribute("data-id");
-            if (!id) {
-                alert("No se encontró el ID, no se puede cambiar");
-                return;
-            }
-            fetch('/actualizarEstado', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id, nuevoEstado: 'Resuelto' })
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        btn.textContent = "Resuelto";
-                        btn.classList.remove("porResolver-btn");
-                        btn.classList.add("resuelto-btn");
-                        btn.onclick = function () { cambiarEstadoResuelto(this); };
-                        // Mover la fila a la tabla de tickets resueltos
-                        fila.parentElement.removeChild(fila);
-                        document.getElementById("resolvedTable").querySelector("tbody").appendChild(fila);
-                    } else {
-                        alert("No se pudo actualizar el estado: " + result.message);
-                    }
+        function cambiarEstadoAProceso(btn) {
+            if (confirm("¿Está seguro de cambiar el estado de este elemento?")) {
+                const fila = btn.closest("tr");
+                const id = fila.getAttribute("data-id");
+                if (!id) {
+                    alert("No se encontró el ID, no se puede cambiar");
+                    return;
+                }
+                fetch('/actualizarEstado', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, nuevoEstado: 'Proceso' })
                 })
-                .catch(error => console.error("Error al actualizar el estado:", error));
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            btn.textContent = "Proceso";
+                            btn.classList.remove("porResolver-btn");
+                            btn.classList.add("proceso-btn");
+                            btn.onclick = function () { cambiarEstadoAFinalizado(this); };
+                            // Mover la fila a la tabla de tickets resueltos
+                            fila.parentElement.removeChild(fila);
+                            document.getElementById("TablaProceso").querySelector("tbody").appendChild(fila);
+                        } else {
+                            alert("No se pudo actualizar el estado: " + result.message);
+                        }
+                    })
+                    .catch(error => console.error("Error al actualizar el estado:", error));
+            }
         }
 
-        function cambiarEstadoResuelto(btn) {
-            const fila = btn.closest("tr");
-            const id = fila.getAttribute("data-id");
-            if (!id) {
-                alert("No se encontró el ID, no se puede cambiar");
-                return;
-            }
-            fetch('/actualizarEstado', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id, nuevoEstado: 'Pendiente' })
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        btn.textContent = "Pendiente";
-                        btn.classList.remove("resuelto-btn");
-                        btn.classList.add("porResolver-btn");
-                        btn.onclick = function () { cambiarEstado(this); };
-                        // Mover la fila a la tabla de tickets pendientes
-                        fila.parentElement.removeChild(fila);
-                        document.getElementById("pendingTable").querySelector("tbody").appendChild(fila);
-                    } else {
-                        alert("No se pudo actualizar el estado: " + result.message);
-                    }
+        function cambiarEstadoAFinalizado(btn) {
+            if (confirm("¿Está seguro de cambiar el estado de este elemento?")) {
+                const fila = btn.closest("tr");
+                const id = fila.getAttribute("data-id");
+                if (!id) {
+                    alert("No se encontró el ID, no se puede cambiar");
+                    return;
+                }
+                fetch('/actualizarEstado', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, nuevoEstado: 'Resuelto' })
                 })
-                .catch(error => console.error("Error al actualizar el estado:", error));
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            btn.textContent = "Resuelto";
+                            btn.classList.remove("proceso-btn");
+                            btn.classList.add("resuelto-btn");
+                            btn.onclick = function () { cambiarEstadoAPendiente(this); };
+                            // Mover la fila a la tabla de tickets pendientes
+                            fila.parentElement.removeChild(fila);
+                            document.getElementById("TablaResuelto").querySelector("tbody").appendChild(fila);
+                        } else {
+                            alert("No se pudo actualizar el estado: " + result.message);
+                        }
+                    })
+                    .catch(error => console.error("Error al actualizar el estado:", error));
+            }
+        }
+
+        function cambiarEstadoAPendiente(btn) {
+            if (confirm("¿Está seguro de cambiar el estado de este elemento?")) {
+                const fila = btn.closest("tr");
+                const id = fila.getAttribute("data-id");
+                if (!id) {
+                    alert("No se encontró el ID, no se puede cambiar");
+                    return;
+                }
+                fetch('/actualizarEstado', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, nuevoEstado: 'Pendiente' })
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            btn.textContent = "Pendiente";
+                            btn.classList.remove("resuelto-btn");
+                            btn.classList.add("porResolver-btn");
+                            btn.onclick = function () { cambiarEstadoAProceso(this); };
+                            // Mover la fila a la tabla de tickets pendientes
+                            fila.parentElement.removeChild(fila);
+                            document.getElementById("TablaPendiente").querySelector("tbody").appendChild(fila);
+                        } else {
+                            alert("No se pudo actualizar el estado: " + result.message);
+                        }
+                    })
+                    .catch(error => console.error("Error al actualizar el estado:", error));
+            }
         }
 
         function editarFila(boton) {
@@ -332,6 +409,7 @@
                 locale: "es",
             });
         });
+
     </script>
 </body>
 

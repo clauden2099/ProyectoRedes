@@ -1,66 +1,79 @@
-:root{
+:root {
 
     --primario: #9C27B0;
     --primarioOscuro: #89119D;
     --secundario: #FFCE00;
-    --secundarioOscuro: rgb(233,287,2);
+    --secundarioOscuro: rgb(233, 287, 2);
     --blanco: #FFF;
     --negro: #000;
 }
 
 /* Globales */
-html{
+html {
     box-sizing: border-box;
-    font-size: 62.5%; /* 1rem = 10px*/
+    font-size: 62.5%;
+    /* 1rem = 10px*/
 }
 
-*,*:before, *:after{
+*,
+*:before,
+*:after {
     box-sizing: inherit;
 }
 
-body{
+body {
     background-color: var(--primario);
     font-size: 1.6rem;
     line-height: 1.5;
 }
 
-p{
+p {
     font-size: 1.8rem;
     font-family: Arial, Helvetica, sans-serif;
     color: var(--blanco);
 }
 
-li{
+li {
     font-size: 1.8rem;
     font-family: Arial, Helvetica, sans-serif;
     color: var(--blanco);
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-img{
+img {
     width: 100%;
 }
 
 /*Con este se supone que se centran los elmetnos*/
-.contenedor{
+.contenedor {
     max-width: 120rem;
     margin: 0 auto;
 }
 
-h1,h2,h3{
+h1,
+h2,
+h3 {
     text-align: center;
     color: var(--secundario);
 }
 
-h1{ font-size: 4rem; }
-h2{ font-size: 3.2rem; }
-h3{ font-size: 2.4rem;}
+h1 {
+    font-size: 4rem;
+}
+
+h2 {
+    font-size: 3.2rem;
+}
+
+h3 {
+    font-size: 2.4rem;
+}
 
 
-.boton{
+.boton {
     display: flex;
     font-size: 2rem;
     text-align: center;
@@ -72,15 +85,16 @@ h3{ font-size: 2.4rem;}
     transition: background-color .3s ease;
 }
 
-.boton:hover{
+.boton:hover {
     cursor: pointer;
     background-color: var(--secundarioOscuro);
 }
+
 /*----- Globales Fin -----*/
 
 
 /*----- Navegación Inicio -----*/
-.navegacion{
+.navegacion {
     background-color: var(--primarioOscuro);
     display: flex;
     flex-direction: column;
@@ -88,13 +102,13 @@ h3{ font-size: 2.4rem;}
 }
 
 @media (min-width: 968px) {
-    .navegacion{
+    .navegacion {
         flex-direction: row;
         justify-content: space-around;
     }
 }
 
-.navegacion__enlace{
+.navegacion__enlace {
     color: var(--blanco);
     font-size: 2.8rem;
     font-weight: 700;
@@ -102,7 +116,7 @@ h3{ font-size: 2.4rem;}
 }
 
 .navegacion__enlace--activo,
-.navegacion__enlace:hover{
+.navegacion__enlace:hover {
     color: var(--secundario);
 }
 
@@ -131,8 +145,8 @@ h3{ font-size: 2.4rem;}
     background-color: rgba(255, 255, 255, 0.4);
     cursor: pointer;
 }
-/*----- Lista de Redes Fin -----*/
 
+/*----- Lista de Redes Fin -----*/
 
 /*----- Lista de dispositivos Inicio----- */
 /* Contenedor de la lista de dispositivos en grid */
@@ -298,6 +312,11 @@ h3{ font-size: 2.4rem;}
     color: var(--blanco);
 }
 
+.proceso-btn{
+    background-color: coral;
+    color: var(--blanco);
+}
+
 .resuelto-btn {
     background-color: green;
     color: var(--blanco);
@@ -352,8 +371,6 @@ h3{ font-size: 2.4rem;}
     cursor: pointer;
 }
 
-
-
 /* Estilos para la tabla de Inventario */
 #miTabla {
     width: 100%;
@@ -401,6 +418,37 @@ h3{ font-size: 2.4rem;}
     color: var(--blanco);
 }
 
+
+
+/* Estilos para la tabla de Inventario */
+#configTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--blanco);
+    margin-top: 2rem;
+}
+
+#configTable th,
+#configTable td {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.6rem;
+}
+
+#configTable th {
+    background-color: var(--primarioOscuro);
+    color: var(--blanco);
+}
+
+/*Login*/
+/* Centrado de la página */
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
 /* Login */
 .login-container {
