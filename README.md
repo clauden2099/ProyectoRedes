@@ -15,8 +15,6 @@ ProyectoRedes es un sistema de gestión de redes diseñado para optimizar la adm
 5. **Automatización de Tareas**: Reduce el tiempo y esfuerzo manual mediante la automatización de procesos repetitivos.
 6. **Seguridad en el Acceso**: Implementa medidas de seguridad para proteger el acceso a la red y sus recursos.
 
-## Instalación
-Para instalar y configurar ProyectoRedes, sigue estos pasos:
-1. Clona el repositorio: 
-   ```bash
-   git clone https://github.com/tuusuario/ProyectoRedes.git
+## Proyecto
+- [Imagen del proyecto] (https://drive.google.com/file/d/1lSuC-Ap4pEanrDHSYW63qBGE5A7G86r1/view?usp=drive_link)
+
