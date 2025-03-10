@@ -16,5 +16,6 @@ ProyectoRedes es un sistema de gestión de redes diseñado para optimizar la adm
 6. **Seguridad en el Acceso**: Implementa medidas de seguridad para proteger el acceso a la red y sus recursos.
 
 ## Proyecto
-- [Imagen del proyecto] (https://drive.google.com/file/d/1lSuC-Ap4pEanrDHSYW63qBGE5A7G86r1/view?usp=drive_link)
+- ![Imagen del proyecto](https://drive.google.com/uc?export=view&id=1lSuC-Ap4pEanrDHSYW63qBGE5A7G86r1)
+
 
